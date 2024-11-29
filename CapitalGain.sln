@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGain", "CapitalGain\CapitalGain.csproj", "{9AA6462F-0B47-4949-B577-131CB0E0B151}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CapitalGainTest", "CapitalGainTest\CapitalGainTest.csproj", "{3D329410-2793-485E-9603-64EF09ED19A8}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9AA6462F-0B47-4949-B577-131CB0E0B151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AA6462F-0B47-4949-B577-131CB0E0B151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AA6462F-0B47-4949-B577-131CB0E0B151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AA6462F-0B47-4949-B577-131CB0E0B151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3D329410-2793-485E-9603-64EF09ED19A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3D329410-2793-485E-9603-64EF09ED19A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3D329410-2793-485E-9603-64EF09ED19A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3D329410-2793-485E-9603-64EF09ED19A8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
