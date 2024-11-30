@@ -7,7 +7,7 @@ em C# rodando em um container Docker.
 
 O projeto foi construído a partir do documento a seguir:
 
-![Desafio Nubank PDF](./Assets/Code_Challenge__Ganho_de_Capital_ptbr.pdf)
+![Desafio Nubank PDF](https://github.com/JulianePires/capital-gain/blob/main/Assets/Code_Challenge__Ganho_de_Capital_ptbr.pdf)
 
 ## Estruturação do Projeto
 
@@ -84,4 +84,5 @@ Tive que alterar o retorno da saída do JSON por conta da formatação da respos
 ## Autor
 
 - [@JulianePires](https://www.github.com/JulianePires)
+
 ```
