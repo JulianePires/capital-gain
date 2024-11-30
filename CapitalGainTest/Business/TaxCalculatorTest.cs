@@ -1,35 +1,74 @@
 ﻿using CapitalGain.Business;
 using CapitalGain.Domain.Entities;
 
-namespace CapitalGainTest.Business;
-
-public class TaxCalculatorTest
+namespace CapitalGainTest.Business
 {
-    [Fact]
-    public void CalculateTaxes_WhenCalled_ReturnsTaxes()
+    public class TaxCalculatorTest
     {
-        // Arrange
-        var trades = new List<Trade>
+        [Fact]
+        public void CalculateTaxes_BuyOperation_AddsZeroTax()
         {
-            new Trade
+            var trades = new List<Trade>
             {
-                Operation = "buy",
-                UnitCost = 10,
-                Quantity = 100
-            },
-            new Trade
+                new() { Operation = "buy", UnitCost = 10.00m, Quantity = 100 }
+            };
+            var taxCalculator = new TaxCalculator();
+
+            var result = taxCalculator.CalculateTaxes(trades);
+
+            Assert.Single(result);
+            Assert.Equal(0, result[0].TaxValue);
+        }
+
+        [Fact]
+        public void CalculateTaxes_SellOperation_CalculatesTaxCorrectly()
+        {
+            var trades = new List<Trade>
             {
-                Operation = "sell",
-                UnitCost = 20,
-                Quantity = 50
-            }
-        };
-        var taxCalculator = new TaxCalculator();
+                new() { Operation = "buy", UnitCost = 10.00m, Quantity = 100 },
+                new() { Operation = "sell", UnitCost = 15.00m, Quantity = 50 }
+            };
+            var taxCalculator = new TaxCalculator();
 
-        // Act
-        var result = taxCalculator.CalculateTaxes(trades);
+            var result = taxCalculator.CalculateTaxes(trades);
 
-        // Assert
-        Assert.NotNull(result);
+            Assert.Equal(2, result.Count);
+            Assert.Equal(0, result[0].TaxValue);
+            Assert.Equal(0, result[1].TaxValue); // Assuming no tax
+        }
+
+        [Fact]
+        public void CalculateTaxes_SellOperationWithHighValue_CalculatesTaxCorrectly()
+        {
+            var trades = new List<Trade>
+            {
+                new() { Operation = "buy", UnitCost = 10.00m, Quantity = 100 },
+                new() { Operation = "sell", UnitCost = 25.00m, Quantity = 1000 }
+            };
+            var taxCalculator = new TaxCalculator();
+
+            var result = taxCalculator.CalculateTaxes(trades);
+
+            Assert.Equal(2, result.Count);
+            Assert.Equal(0, result[0].TaxValue);
+            Assert.Equal(3000, result[1].TaxValue); // Assuming 20% tax on profit
+        }
+
+        [Fact]
+        public void CalculateTaxes_SellOperationWithLoss_AccumulatesLossCorrectly()
+        {
+            var trades = new List<Trade>
+            {
+                new() { Operation = "buy", UnitCost = 20.00m, Quantity = 100 },
+                new() { Operation = "sell", UnitCost = 15.00m, Quantity = 50 }
+            };
+            var taxCalculator = new TaxCalculator();
+
+            var result = taxCalculator.CalculateTaxes(trades);
+
+            Assert.Equal(2, result.Count);
+            Assert.Equal(0, result[0].TaxValue);
+            Assert.Equal(0, result[1].TaxValue); // Assuming no tax due to loss
+        }
     }
 }
