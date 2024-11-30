@@ -4,10 +4,10 @@ namespace CapitalGain.Domain.Entities;
 
 public class Tax
 {
-    private decimal _taxValue;
+    private string _taxValue;
 
     [JsonPropertyName("tax")]
-    public decimal TaxValue
+    public string TaxValue
     {
         get => _taxValue;
         set => _taxValue = value;

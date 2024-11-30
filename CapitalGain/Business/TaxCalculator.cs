@@ -7,10 +7,8 @@ namespace CapitalGain.Business
     {
         private readonly IList<Tax> _taxes = new List<Tax>();
         private int _currentQuantity;
-        private decimal _currentBuyUnitCost;
         private decimal _currentWeightedAverage;
         private decimal _currentSellLoss;
-        private bool _recalculateAverage = true;
 
         public IList<Tax> CalculateTaxes(IList<Trade> trades)
         {
@@ -32,23 +30,19 @@ namespace CapitalGain.Business
 
         private void HandleBuyOperation(Trade trade)
         {
-            _currentBuyUnitCost = trade.UnitCost;
+            _currentWeightedAverage = CalculateWeightedAverage(trade.UnitCost, trade.Quantity,
+                _currentWeightedAverage, _currentQuantity);
             _currentQuantity += trade.Quantity;
-            _recalculateAverage = true;
-            _taxes.Add(new Tax { TaxValue = 0m });
+            _taxes.Add(new Tax { TaxValue = 0.ToString("F").Replace(',', '.') });
         }
 
         private void HandleSellOperation(Trade trade)
         {
-            if (_recalculateAverage)
-            {
-                _currentWeightedAverage = CalculateWeightedAverage(trade.UnitCost, trade.Quantity,
-                    _currentWeightedAverage, _currentQuantity);
-                _recalculateAverage = false;
-            }
+            _currentQuantity -= trade.Quantity;
 
             var tax = 0m;
-            var sellBalance = CalculateSellBalance(trade.UnitCost, trade.Quantity, _currentBuyUnitCost);
+
+            var sellBalance = CalculateSellBalance(trade.UnitCost, trade.Quantity, _currentWeightedAverage);
 
             if (trade.UnitCost < _currentWeightedAverage)
             {
@@ -56,35 +50,39 @@ namespace CapitalGain.Business
             }
             else if (trade.UnitCost > _currentWeightedAverage)
             {
+                if (_currentSellLoss > 0)
+                {
+                    if (sellBalance > _currentSellLoss)
+                    {
+                        sellBalance -= _currentSellLoss;
+                        _currentSellLoss = 0;
+                    }
+                    else
+                    {
+                        _currentSellLoss -= sellBalance;
+                        sellBalance = 0;
+                    }
+                }
+
                 if (trade.UnitCost * trade.Quantity > 20000)
                 {
                     tax = sellBalance * 0.2m;
                 }
-
-                if (_currentSellLoss > 0)
-                {
-                    _currentSellLoss = DeductLossFromProfit(sellBalance, _currentSellLoss);
-                }
             }
 
-            _taxes.Add(new Tax { TaxValue = tax });
-            _currentQuantity -= trade.Quantity;
+            _taxes.Add(new Tax { TaxValue = tax.ToString("F").Replace(',', '.') });
         }
 
-        private static decimal DeductLossFromProfit(decimal sellBalance, decimal currentSellLoss)
+        private static decimal CalculateSellBalance(decimal unitCost, int quantity, decimal averageCost)
         {
-            return sellBalance > currentSellLoss ? 0 : currentSellLoss - sellBalance;
-        }
-
-        private static decimal CalculateSellBalance(decimal sellPrice, int quantity, decimal currentBuyUnitCost)
-        {
-            return Math.Abs(currentBuyUnitCost - sellPrice) * quantity;
+            return
+                Math.Abs(unitCost - averageCost) * quantity;
         }
 
         private static decimal CalculateWeightedAverage(decimal unitCost, int quantity, decimal currentWeightedAverage,
             int currentQuantity)
         {
-            return (unitCost * quantity + currentWeightedAverage * currentQuantity) /
+            return Math.Round(unitCost * quantity + currentWeightedAverage * currentQuantity) /
                    (quantity + currentQuantity);
         }
     }
