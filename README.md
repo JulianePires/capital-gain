@@ -60,7 +60,7 @@ Para rodar a aplicação local, rode o seguinte comando
 Para rodar a aplicação em um container Docker, rode o seguinte comando
 
 ```bash
-  docker build -t ganhodecapital -f CapitalGain\Dockerfile .
+  docker build -t capitalgain -f CapitalGain\Dockerfile .
   docker run -it capitalgain
 ```
 
