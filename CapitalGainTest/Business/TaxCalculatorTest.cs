@@ -17,7 +17,7 @@ namespace CapitalGainTest.Business
             var result = taxCalculator.CalculateTaxes(trades);
 
             Assert.Single(result);
-            Assert.Equal("0,00", result[0].TaxValue);
+            Assert.Equal("0.00", result[0].TaxValue);
         }
 
         [Fact]
@@ -33,8 +33,8 @@ namespace CapitalGainTest.Business
             var result = taxCalculator.CalculateTaxes(trades);
 
             Assert.Equal(2, result.Count);
-            Assert.Equal("0,00", result[0].TaxValue);
-            Assert.Equal("0,00", result[1].TaxValue); // Assuming no tax
+            Assert.Equal("0.00", result[0].TaxValue);
+            Assert.Equal("0.00", result[1].TaxValue); // Assuming no tax
         }
 
         [Fact]
@@ -50,8 +50,8 @@ namespace CapitalGainTest.Business
             var result = taxCalculator.CalculateTaxes(trades);
 
             Assert.Equal(2, result.Count);
-            Assert.Equal("0,00", result[0].TaxValue);
-            Assert.Equal("3000,00", result[1].TaxValue); // Assuming 20% tax on profit
+            Assert.Equal("0.00", result[0].TaxValue);
+            Assert.Equal("3000.00", result[1].TaxValue); // Assuming 20% tax on profit
         }
 
         [Fact]
@@ -67,8 +67,8 @@ namespace CapitalGainTest.Business
             var result = taxCalculator.CalculateTaxes(trades);
 
             Assert.Equal(2, result.Count);
-            Assert.Equal("0,00", result[0].TaxValue);
-            Assert.Equal("0,00", result[1].TaxValue); // Assuming no tax due to loss
+            Assert.Equal("0.00", result[0].TaxValue);
+            Assert.Equal("0.00", result[1].TaxValue); // Assuming no tax due to loss
         }
     }
 }
